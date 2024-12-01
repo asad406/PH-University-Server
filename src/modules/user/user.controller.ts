@@ -4,8 +4,8 @@ import { UserService } from "./user.service";
 
 const createStudent = async(req: Request,res: Response) => {
   try{
-    const body = req.body
-    const result = await UserService.createStudentToDB(body)
+    const {password, student:studentData} = req.body
+    const result = await UserService.createStudentToDB(password,studentData)
     res.status(200).json({
         message: 'Student created successfully',
         success: true
