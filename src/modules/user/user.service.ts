@@ -12,7 +12,7 @@ const createStudentToDB = async (password: string, studentData: TStudent) => {
     //set student role
     userData.role = "student"
     //set manually generated it
-    userData.id = '20230002'
+    userData.id = '20230003'
     //create a user 
     const newUser = await User.create(userData)
 

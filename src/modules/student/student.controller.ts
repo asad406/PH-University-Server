@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { StudentServices } from './student.service';
 // import { z } from "zod";
 // import studentValidationSchema from './student.zod.validation';
@@ -28,7 +28,7 @@ import { StudentServices } from './student.service';
 //   }
 // };
 // Data receive from student.service
-const getAllStudent = async (req: Request, res: Response) => {
+const getAllStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await StudentServices.getAllStudentFromDB();
     res.status(200).json({
@@ -37,11 +37,10 @@ const getAllStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
+    next(err)
   }
 };
-const getSingleStudent = async (req: Request, res: Response) => {
+const getSingleStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { studentId } = req.params;
     const result = await StudentServices.getSingleStudentFromDB(studentId);
@@ -52,11 +51,10 @@ const getSingleStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
+    next(err)
   }
 };
-const deleteSingleStudent = async (req: Request, res: Response) => {
+const deleteSingleStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { studentId } = req.params;
     const result = await StudentServices.deleteSingleStudentFromDB(studentId);
@@ -67,8 +65,7 @@ const deleteSingleStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
+    next(err)
   }
 };
 export const StudentControllers = {
