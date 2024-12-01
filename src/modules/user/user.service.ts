@@ -1,5 +1,6 @@
 import config from "../../config";
 import { TStudent } from "../student/student.interface";
+import { StudentModel } from "../student/student.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 
@@ -11,7 +12,7 @@ const createStudentToDB = async (password: string, studentData: TStudent) => {
     //set student role
     userData.role = "student"
     //set manually generated it
-    userData.id = '20230001'
+    userData.id = '20230002'
     //create a user 
     const newUser = await User.create(userData)
 
@@ -20,13 +21,14 @@ const createStudentToDB = async (password: string, studentData: TStudent) => {
         studentData.id = newUser.id //Embedded id
         studentData.user = newUser._id //reference _id
 
-        const newStudent = await Student
+        const newStudent = await StudentModel.create(studentData)
+        return newStudent
     }
     // // const data = new User(user)
     // const result = await data.save()
     // return result
 }
 
-export const UserService = {
+export const UserServices = {
     createStudentToDB
 }
