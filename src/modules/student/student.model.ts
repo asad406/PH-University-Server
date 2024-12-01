@@ -6,8 +6,6 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -92,7 +90,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 //Main Student Schema
 const studentSchema = new Schema<TStudent>({
   id: { type: String, unique: true },
-  password: { type: String, required: [true, 'password is must required'], max: [20, 'Password can not be more then 20 char'] },
+  // password: { type: String, required: [true, 'password is must required'], max: [20, 'Password can not be more then 20 char'] },
   user: {
     type: Schema.Types.ObjectId,
     required: [true, 'User is required'],
@@ -158,15 +156,8 @@ const studentSchema = new Schema<TStudent>({
 }
 );
 
-studentSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_round))
 
-})
-studentSchema.post('save', function (doc, next) {
-  doc.password = ""
-  next();
-})
-
+//Query middleware
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } })
   next()
