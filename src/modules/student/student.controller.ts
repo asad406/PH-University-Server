@@ -2,6 +2,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from "http-status";
+import catchAsync from '../../utils/catchAsync';
 // import { z } from "zod";
 // import studentValidationSchema from './student.zod.validation';
 
@@ -29,14 +30,9 @@ import httpStatus from "http-status";
 //     // console.log(error);
 //   }
 // };
-/*higher order function*/
-const catchAsync = (func: RequestHandler) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(func(req, res, next)).catch(err => next(err))
-  }
-}
+
 // Data receive from student.service
-const getAllStudent: RequestHandler = catchAsync(async (req, res, next) => {
+const getAllStudent: RequestHandler = catchAsync(async (req, res) => {
   const result = await StudentServices.getAllStudentFromDB();
   // res.status(200).json({
   //   success: true,
@@ -51,7 +47,7 @@ const getAllStudent: RequestHandler = catchAsync(async (req, res, next) => {
   })
 });
 
-const getSingleStudent = catchAsync(async (req, res, next) => {
+const getSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.getSingleStudentFromDB(studentId);
   // res.status(200).json({
@@ -66,7 +62,7 @@ const getSingleStudent = catchAsync(async (req, res, next) => {
     data: result,
   })
 });
-const deleteSingleStudent = catchAsync(async (req, res, next) => {
+const deleteSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.deleteSingleStudentFromDB(studentId);
   // res.status(200).json({
