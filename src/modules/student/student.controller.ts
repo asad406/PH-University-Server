@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { StudentServices } from './student.service';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from "http-status";
 // import { z } from "zod";
 // import studentValidationSchema from './student.zod.validation';
 
@@ -31,11 +33,17 @@ import { StudentServices } from './student.service';
 const getAllStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await StudentServices.getAllStudentFromDB();
-    res.status(200).json({
+    // res.status(200).json({
+    //   success: true,
+    //   message: 'Student is retrieved successfully',
+    //   data: result,
+    // });
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'Student is retrieved successfully',
       data: result,
-    });
+    })
   } catch (err) {
     next(err)
   }
@@ -45,11 +53,18 @@ const getSingleStudent = async (req: Request, res: Response, next: NextFunction)
     const { studentId } = req.params;
     const result = await StudentServices.getSingleStudentFromDB(studentId);
 
-    res.status(200).json({
+    // res.status(200).json({
+    //   success: true,
+    //   message: 'Students are retrieved successfully',
+    //   data: result,
+    // });
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'Students are retrieved successfully',
       data: result,
-    });
+    })
   } catch (err) {
     next(err)
   }
@@ -59,11 +74,17 @@ const deleteSingleStudent = async (req: Request, res: Response, next: NextFuncti
     const { studentId } = req.params;
     const result = await StudentServices.deleteSingleStudentFromDB(studentId);
 
-    res.status(200).json({
+    // res.status(200).json({
+    //   success: true,
+    //   message: 'Student is deleted successfully',
+    //   data: result,
+    // });
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'Student is deleted successfully',
       data: result,
-    });
+    })
   } catch (err) {
     next(err)
   }
