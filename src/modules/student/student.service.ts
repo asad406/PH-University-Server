@@ -1,5 +1,5 @@
+
 import { StudentModel } from './student.model';
-import { TStudent } from './student.interface';
 
 // const createStudentIntoDB = async (student: TStudent) => {
 //   const studentData = new StudentModel(student)
@@ -8,11 +8,25 @@ import { TStudent } from './student.interface';
 //   return result; // result will go to controller
 // };
 const getAllStudentFromDB = async () => {
-  const result = await StudentModel.find();
+  const result = await StudentModel.find()
+  .populate('admissionSemester')
+  .populate ({
+    path: 'academicDepartment',
+    populate : {
+      path: 'academicFaculty'
+    }
+  });
   return result; // result will go to controller
 };
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await StudentModel.findOne({ id });
+  const result = await StudentModel.findOne({ id })
+  .populate('admissionSemester')
+  .populate ({
+    path: 'academicDepartment',
+    populate : {
+      path: 'academicFaculty'
+    }
+  });
   return result; // result will go to controller
 };
 const deleteSingleStudentFromDB = async (id: string) => {
