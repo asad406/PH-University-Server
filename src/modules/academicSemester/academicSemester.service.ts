@@ -13,7 +13,7 @@ const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
 }
 
 const getSingleAcademicSemesterFromDB = async (id: string) => {
-    const result = await AcademicSemester.findById(id);
+    const result = await AcademicSemester.findOne({id});
     return result;
   };
 

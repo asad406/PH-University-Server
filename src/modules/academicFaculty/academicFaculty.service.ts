@@ -12,12 +12,12 @@ const getAllAcademicFacultyFromDB = async () => {
 }
 
 const getSingleAcademicFacultyFromDB = async (id: string) => {
-    const result = await AcademicFaculty.findById(id);
+    const result = await AcademicFaculty.findOne({ id });
     return result
 }
 
 const updateAcademicFacultyIntoDB = async (id: string, payload: Partial<TAcademicFaculty>,) => {
-    const result = await AcademicFaculty.findOneAndUpdate({_id: id}, payload, {
+    const result = await AcademicFaculty.findOneAndUpdate({ _id: id }, payload, {
         new: true,
         // runValidators: true
     })

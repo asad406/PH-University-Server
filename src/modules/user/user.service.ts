@@ -72,6 +72,7 @@ const createStudentToDB = async (password: string, payload: TStudent) => {
     } catch (err) {
         await session.abortTransaction();
         await session.endSession();
+        throw new AppError(httpStatus.NOT_FOUND, 'Failed to create student')
     }
     // // const data = new User(user)
     // const result = await data.save()
