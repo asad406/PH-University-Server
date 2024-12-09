@@ -30,6 +30,7 @@ academicDepartmentSchema.pre('save', async function(next){
         throw new AppError(httpStatus.NOT_FOUND as number,'This department is already exist!.')
     }
 })
+
 //To prevent success message when wrong id input
 academicDepartmentSchema.pre('findOneAndUpdate', async function(next) {
     const query = this.getQuery();
