@@ -1,4 +1,4 @@
-import express, { Application } from 'express'
+import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
 // import { UserRouters } from './modules/user/user.route'
 // import { StudentRoutes } from './modules/student/student.route'
@@ -15,7 +15,10 @@ app.use(cors())
 // app.use('/api/students',StudentRoutes)
 app.use('/api',router)
 
-
+const test = async (req:Request , res: Response) => {
+    Promise.reject();
+}
+app.get('/', test)
 
 app.use(globalErrorHandler)
 //not found
