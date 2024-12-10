@@ -11,8 +11,24 @@ import { TStudent } from './student.interface';
 //   // const result = await StudentModel.create(student);
 //   return result; // result will go to controller
 // };
-const getAllStudentFromDB = async () => {
-  const result = await StudentModel.find()
+const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+
+  /*
+  {email: { $regex : query.searchTerm, $options: "i"}}
+  {presentAddress: {$regex: query.searchTerm, $options: "i"}}
+  {'name.firstName': {$regex : query.searchTerm, $option: 'i'}}  
+  */
+ const studentSearchableField = ['email', 'name.firstName', 'presentAddress']
+  let searchTerm = '';
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm as string;
+  }
+  const searchQuery = StudentModel.find({
+    $or: studentSearchableField.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i'}
+    }))
+  })
+  const result = await searchQuery.find()
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -63,11 +79,11 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
       modifiedUpdatedData[`localGuardian.${key}`] = value
     }
   }
-console.log(modifiedUpdatedData);
+  console.log(modifiedUpdatedData);
   const result = await StudentModel.findOneAndUpdate(
-    { id }, 
-    modifiedUpdatedData, 
-    { new: true , runValidators: true })
+    { id },
+    modifiedUpdatedData,
+    { new: true, runValidators: true })
 
   return result; // result will go to controller
 };

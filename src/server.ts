@@ -33,4 +33,4 @@ process.on('uncaughtException', () => {
     process.exit(1)
 })
 
-console.log(z);
+// console.log(z);
