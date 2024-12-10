@@ -17,6 +17,8 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   {email: { $regex : query.searchTerm, $options: "i"}}
   {presentAddress: {$regex: query.searchTerm, $options: "i"}}
   {'name.firstName': {$regex : query.searchTerm, $option: 'i'}}  
+
+  http://localhost:5000/api/students?email=summer2@example.com&searchTerm=mic
   */
   const queryObj = { ...query }
   const studentSearchableField = ['email', 'name.firstName', 'presentAddress']
@@ -27,13 +29,15 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   //searching
   const searchQuery = StudentModel.find({
     $or: studentSearchableField.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' }
+      [field]: { $regex: searchTerm, $options: 'i' } //i for case insensitive 
     }))
   })
   //Filtering
-  const excludeFields = ['searchTerm']
+  const excludeFields = ['searchTerm','sort']
+
   excludeFields.forEach((el) => delete queryObj[el]);
-  const result = await searchQuery
+
+  const filterQuery =  searchQuery
     .find(queryObj)
     .populate('admissionSemester')
     .populate({
@@ -42,8 +46,17 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
         path: 'academicFaculty'
       }
     });
-  return result; // result will go to controller
+
+    let sort = '-createdAt';
+    if(query.sort){
+      sort = query.sort as string
+    }
+    const sortQuery = await filterQuery.sort(sort);
+
+  return sortQuery; // result will go to controller
 };
+
+
 const getSingleStudentFromDB = async (id: string) => {
   const result = await StudentModel.findOne({ id })
     .populate('admissionSemester')
