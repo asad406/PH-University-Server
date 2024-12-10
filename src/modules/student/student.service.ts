@@ -22,6 +22,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   */
   const queryObj = { ...query }
   const studentSearchableField = ['email', 'name.firstName', 'presentAddress']
+
   let searchTerm = '';
   if (query?.searchTerm) {
     searchTerm = query?.searchTerm as string;
@@ -33,7 +34,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
     }))
   })
   //Filtering
-  const excludeFields = ['searchTerm', 'sort']
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
 
   excludeFields.forEach((el) => delete queryObj[el]);
 
@@ -46,14 +47,43 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
         path: 'academicFaculty'
       }
     });
-
+  //http://localhost:5000/api/students?sort=email
   let sort = '-createdAt';
   if (query.sort) {
     sort = query.sort as string
   }
-  const sortQuery = await filterQuery.sort(sort);
+  const sortQuery = filterQuery.sort(sort);
+  // http://localhost:5000/api/students?page=1&limit=2
+  //http://localhost:5000/api/students?limit=1
 
-  return sortQuery; // result will go to controller
+  //pagination and limiting
+  let limit = 1
+  let page = 1
+  let skip = 0
+
+  if (query.limit) {
+    limit = query.limit as number
+  }
+
+  if (query.page) {
+    page = query.page as number
+    skip = (page - 1) * limit
+  }
+
+  const paginateQuery = sortQuery.skip(skip)
+
+  const limitQuery = paginateQuery.limit(limit)
+  
+  //http://localhost:5000/api/students?fields=name,email
+  //field limiting
+  let fields = '-__v'
+  if (query.fields) {
+    fields = (query.fields as string).split(',').join(' ')
+    // console.log({fields});
+  }
+  const fieldQuery = await limitQuery.select(fields)
+
+  return fieldQuery; // result will go to controller
 };
 
 
