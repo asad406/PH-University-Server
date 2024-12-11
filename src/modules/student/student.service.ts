@@ -4,6 +4,8 @@ import { StudentModel } from './student.model';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import { TStudent } from './student.interface';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { studentSearchableField } from './student.const';
 
 // const createStudentIntoDB = async (student: TStudent) => {
 //   const studentData = new StudentModel(student)
@@ -19,7 +21,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   {'name.firstName': {$regex : query.searchTerm, $option: 'i'}}  
 
   http://localhost:5000/api/students?email=summer2@example.com&searchTerm=mic
-  */
+  
   const queryObj = { ...query }
   const studentSearchableField = ['email', 'name.firstName', 'presentAddress']
 
@@ -47,6 +49,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
         path: 'academicFaculty'
       }
     });
+
   //http://localhost:5000/api/students?sort=email
   let sort = '-createdAt';
   if (query.sort) {
@@ -84,6 +87,23 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   const fieldQuery = await limitQuery.select(fields)
 
   return fieldQuery; // result will go to controller
+  */
+  const studentQuery = new QueryBuilder(StudentModel.find()
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty'
+      }
+    }), query)
+    .search(studentSearchableField)
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+
+    const result = await studentQuery.modelQuery;
+    return result;
 };
 
 

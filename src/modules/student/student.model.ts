@@ -181,7 +181,7 @@ studentSchema.pre('aggregate', function (next) {
 
 //Mongoose Virtuals
 userNameSchema.virtual('fullName').get(function () {
-  return `${this.firstName} ${this.middleName} ${this.lastName}`
+  return `${this?.firstName} ${this?.middleName} ${this?.lastName}`
 })
 
 export const StudentModel = model<TStudent>('Student', studentSchema);
