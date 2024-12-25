@@ -184,4 +184,4 @@ userNameSchema.virtual('fullName').get(function () {
   return `${this?.firstName} ${this?.middleName} ${this?.lastName}`
 })
 
-export const StudentModel = model<TStudent>('Student', studentSchema);
+export const Student = model<TStudent>('Student', studentSchema);

@@ -3,7 +3,7 @@ import config from "../../config";
 import AppError from "../../errors/AppError";
 import AcademicSemester from "../academicSemester/academicSemester.model";
 import { TStudent } from "../student/student.interface";
-import { StudentModel } from "../student/student.model";
+import { Student } from "../student/student.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import httpStatus from "http-status";
@@ -62,7 +62,7 @@ const createStudentToDB = async (password: string, payload: TStudent) => {
         payload.user = newUser[0]._id //reference _id
 
         //step - 4 (transaction-2)
-        const newStudent = await StudentModel.create([payload], { session })
+        const newStudent = await Student.create([payload], { session })
         if (!newStudent.length) {
             throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Student')
         }
