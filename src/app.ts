@@ -13,7 +13,7 @@ app.use(cors())
 //Application routes
 // app.use('/api/users',UserRouters)
 // app.use('/api/students',StudentRoutes)
-app.use('/api',router)
+app.use('/api/v1',router)
 
 const test = async (req:Request , res: Response) => {
     Promise.reject();
