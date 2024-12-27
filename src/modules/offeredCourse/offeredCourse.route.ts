@@ -10,6 +10,6 @@ router.get('/:facultyId', offeredCourseController.getSingleOfferedCourse)
 
 router.get('/', offeredCourseController.getAllOfferedCourses)
 
-router.patch('/:facultyId', validateRequest(OfferedCourseValidation.updateOfferedCourseValidationSchema),  offeredCourseController.updateOfferedCourse)
+router.patch('/:id', validateRequest(OfferedCourseValidation.updateOfferedCourseValidationSchema),  offeredCourseController.updateOfferedCourse)
 
 export const OfferedCourseRoutes = router
