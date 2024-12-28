@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
-import httpStatus from "http-status";
+import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 // import { z } from "zod";
 // import studentValidationSchema from './student.zod.validation';
@@ -33,7 +33,7 @@ import catchAsync from '../../utils/catchAsync';
 
 // Data receive from student.service
 const getAllStudent: RequestHandler = catchAsync(async (req, res) => {
-
+  console.log('from student controller', req.cookies);
   const result = await StudentServices.getAllStudentFromDB(req.query);
   // res.status(200).json({
   //   success: true,
@@ -45,7 +45,7 @@ const getAllStudent: RequestHandler = catchAsync(async (req, res) => {
     success: true,
     message: 'Student is retrieved successfully',
     data: result,
-  })
+  });
 });
 
 const getSingleStudent = catchAsync(async (req, res) => {
@@ -61,13 +61,13 @@ const getSingleStudent = catchAsync(async (req, res) => {
     success: true,
     message: 'Students are retrieved successfully',
     data: result,
-  })
+  });
 });
 
 const updateStudentIntoDB = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const {student} = req.body
-  const result = await StudentServices.updateStudentIntoDB(id,student);
+  const { student } = req.body;
+  const result = await StudentServices.updateStudentIntoDB(id, student);
   // res.status(200).json({
   //   success: true,
   //   message: 'Student is deleted successfully',
@@ -78,7 +78,7 @@ const updateStudentIntoDB = catchAsync(async (req, res) => {
     success: true,
     message: 'Student is updated successfully',
     data: result,
-  })
+  });
 });
 
 const deleteSingleStudent = catchAsync(async (req, res) => {
@@ -94,7 +94,7 @@ const deleteSingleStudent = catchAsync(async (req, res) => {
     success: true,
     message: 'Student is deleted successfully',
     data: result,
-  })
+  });
 });
 export const StudentControllers = {
   //It will use Router
@@ -102,5 +102,5 @@ export const StudentControllers = {
   getAllStudent,
   getSingleStudent,
   updateStudentIntoDB,
-  deleteSingleStudent
+  deleteSingleStudent,
 };

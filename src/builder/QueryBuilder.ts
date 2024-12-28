@@ -17,7 +17,7 @@
 //                 $or: searchableFields.map(
 //                     (field) =>
 //                         ({
-//                             [field]: { $regex: searchTerm, $options: 'i' } //i for case insensitive 
+//                             [field]: { $regex: searchTerm, $options: 'i' } //i for case insensitive
 //                         }) as FilterQuery<T>
 //                 )
 //             })
@@ -58,7 +58,6 @@
 // }
 
 // export default QueryBuilder;
-
 
 import { FilterQuery, Query } from 'mongoose';
 
@@ -128,4 +127,3 @@ class QueryBuilder<T> {
 }
 
 export default QueryBuilder;
-

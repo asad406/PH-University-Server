@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 // import { Schema, model, connect } from 'mongoose';
 export type TUserName = {
@@ -39,5 +39,5 @@ export type TStudent = {
   profileImage?: string;
   admissionSemester: Types.ObjectId;
   academicDepartment: Types.ObjectId;
-  isDeleted: boolean
+  isDeleted: boolean;
 };

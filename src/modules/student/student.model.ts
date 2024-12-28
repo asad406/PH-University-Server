@@ -7,58 +7,58 @@ import {
   TUserName,
 } from './student.interface';
 
-const userNameSchema = new Schema<TUserName>({
-  firstName: {
-    type: String,
-    trim: true, // trim delete white space 
-    maxLength: [20, 'Maximum allowed length is 20'],
-    required: [true, 'First Name is required'],
+const userNameSchema = new Schema<TUserName>(
+  {
+    firstName: {
+      type: String,
+      trim: true, // trim delete white space
+      maxLength: [20, 'Maximum allowed length is 20'],
+      required: [true, 'First Name is required'],
+    },
+    middleName: {
+      type: String,
+      trim: true, // trim delete white space
+      required: true,
+      // validate: {
+      //   validator: function(value){
+      //     const lastNameStr = value.charAt(0).toUpperCase() + value.slice(1)
+      //     return lastNameStr !== value
+      //   },
+      //   message: '{VALUE} is not in capitalize format.'
+      // }
+    },
+    lastName: {
+      type: String,
+      trim: true, // trim delete white space
+      required: [true, 'Last Name is required'],
+    },
   },
-  middleName: {
-    type: String,
-    trim: true, // trim delete white space 
-    required: true,
-    // validate: {
-    //   validator: function(value){
-    //     const lastNameStr = value.charAt(0).toUpperCase() + value.slice(1)
-    //     return lastNameStr !== value
-    //   },
-    //   message: '{VALUE} is not in capitalize format.'
-    // }
-  },
-  lastName: {
-    type: String,
-    trim: true, // trim delete white space 
-    required: [true, 'Last Name is required'],
-  },
-},
   {
     toJSON: {
       virtuals: true,
-    }
-  }
-
+    },
+  },
 );
 
 const guardianSchema = new Schema<TGuardian>({
   fatherName: {
     type: String,
-    trim: true, // trim delete white space 
+    trim: true, // trim delete white space
     required: [true, 'Father name is required'],
   },
   fatherOccupation: {
     type: String,
-    trim: true, // trim delete white space 
+    trim: true, // trim delete white space
     required: [true, 'Father Occupation is required'],
   },
   fatherContactNo: {
     type: String,
-    trim: true, // trim delete white space 
+    trim: true, // trim delete white space
     required: [true, 'Father Contract Number is required'],
   },
   motherName: {
     type: String,
-    trim: true, // trim delete white space 
+    trim: true, // trim delete white space
     required: [true, 'Mother name is required'],
   },
   motherOccupation: {
@@ -95,7 +95,7 @@ const studentSchema = new Schema<TStudent>({
     type: Schema.Types.ObjectId,
     required: [true, 'User is required'],
     unique: true,
-    ref: 'User'
+    ref: 'User',
   },
   name: {
     type: userNameSchema,
@@ -103,8 +103,12 @@ const studentSchema = new Schema<TStudent>({
   },
   gender: {
     type: String,
-    enum: { values: ['male', 'female', 'other'], message: "The gender field can only be one of the following 'male','female', or 'other'." },
-    required: true
+    enum: {
+      values: ['male', 'female', 'other'],
+      message:
+        "The gender field can only be one of the following 'male','female', or 'other'.",
+    },
+    required: true,
   },
   dateOfBirth: {
     type: String,
@@ -140,48 +144,46 @@ const studentSchema = new Schema<TStudent>({
   },
   guardian: {
     type: guardianSchema,
-    required: true
+    required: true,
   },
   localGuardian: {
     type: localGuardianSchema,
-    required: true
+    required: true,
   },
   profileImage: {
     type: String,
   },
   admissionSemester: {
     type: Schema.Types.ObjectId,
-    ref: 'AcademicSemester'
+    ref: 'AcademicSemester',
   },
   academicDepartment: {
     type: Schema.Types.ObjectId,
-    ref: 'AcademicDepartment'
+    ref: 'AcademicDepartment',
   },
   isDeleted: {
     type: Boolean,
-    default: false
-  }
-}
-);
-
+    default: false,
+  },
+});
 
 //Query middleware
 studentSchema.pre('find', function (next) {
-  this.find({ isDeleted: { $ne: true } })
-  next()
-})
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 studentSchema.pre('findOne', function (next) {
-  this.find({ isDeleted: { $ne: true } })
-  next()
-})
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 studentSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
-  next()
-})
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 //Mongoose Virtuals
 userNameSchema.virtual('fullName').get(function () {
-  return `${this?.firstName} ${this?.middleName} ${this?.lastName}`
-})
+  return `${this?.firstName} ${this?.middleName} ${this?.lastName}`;
+});
 
 export const Student = model<TStudent>('Student', studentSchema);

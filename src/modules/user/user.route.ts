@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express';
 import { UserController } from './user.controller';
 import { AnyZodObject } from 'zod';
 import { studentValidations } from '../student/student.zod.validation';
@@ -10,20 +10,24 @@ import { USER_ROLE } from './user.constant';
 
 const router = express.Router();
 
-router.post('/create-student',
-    auth(USER_ROLE.admin),
-    validateRequest(studentValidations.createStudentValidationSchema),
-    UserController.createStudent)
+router.post(
+  '/create-student',
+  auth(USER_ROLE.admin),
+  validateRequest(studentValidations.createStudentValidationSchema),
+  UserController.createStudent,
+);
 
-router.post('/create-faculty', 
-    auth(USER_ROLE.admin),
-    validateRequest(facultyValidations.createFacultyValidationSchema), 
-    UserController.createFaculty)
+router.post(
+  '/create-faculty',
+  auth(USER_ROLE.admin),
+  validateRequest(facultyValidations.createFacultyValidationSchema),
+  UserController.createFaculty,
+);
 
-router.post('/create-admin', 
-    validateRequest(AdminValidations.createAdminValidationSchema), 
-    UserController.createAdmin)
+router.post(
+  '/create-admin',
+  validateRequest(AdminValidations.createAdminValidationSchema),
+  UserController.createAdmin,
+);
 
-
-
-export const UserRoutes = router
+export const UserRoutes = router;

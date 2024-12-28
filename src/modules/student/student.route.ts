@@ -9,12 +9,14 @@ const router = express.Router();
 // router.post('/create-student', StudentControllers.createStudent);
 router.get('/:id', StudentControllers.getSingleStudent);
 
-router.patch('/:id',
-    validateRequest(studentValidations.updateStudentValidationSchema),
-    StudentControllers.updateStudentIntoDB);
+router.patch(
+  '/:id',
+  validateRequest(studentValidations.updateStudentValidationSchema),
+  StudentControllers.updateStudentIntoDB,
+);
 
 router.delete('/:id', StudentControllers.deleteSingleStudent);
 
-router.get('/',auth(USER_ROLE.admin), StudentControllers.getAllStudent);
+router.get('/', auth(USER_ROLE.admin), StudentControllers.getAllStudent);
 
 export const StudentRoutes = router;

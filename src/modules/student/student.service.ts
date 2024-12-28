@@ -1,4 +1,3 @@
-
 import mongoose from 'mongoose';
 import { Student } from './student.model';
 import AppError from '../../errors/AppError';
@@ -14,7 +13,6 @@ import { studentSearchableField } from './student.const';
 //   return result; // result will go to controller
 // };
 const getAllStudentFromDB = async (query: Record<string, unknown>) => {
-
   /*
   {email: { $regex : query.searchTerm, $options: "i"}}
   {presentAddress: {$regex: query.searchTerm, $options: "i"}}
@@ -88,24 +86,27 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   return fieldQuery; // result will go to controller
   */
-  const studentQuery = new QueryBuilder(Student.find().populate('user')
-    .populate('admissionSemester')
-    .populate({
-      path: 'academicDepartment',
-      populate: {
-        path: 'academicFaculty'
-      }
-    }), query)
+  const studentQuery = new QueryBuilder(
+    Student.find()
+      .populate('user')
+      .populate('admissionSemester')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      }),
+    query,
+  )
     .search(studentSearchableField)
     .filter()
     .sort()
     .paginate()
-    .fields()
+    .fields();
 
   const result = await studentQuery.modelQuery;
   return result;
 };
-
 
 const getSingleStudentFromDB = async (id: string) => {
   const result = await Student.findById(id)
@@ -113,17 +114,16 @@ const getSingleStudentFromDB = async (id: string) => {
     .populate({
       path: 'academicDepartment',
       populate: {
-        path: 'academicFaculty'
-      }
+        path: 'academicFaculty',
+      },
     });
   return result; // result will go to controller
 };
 const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
-
   const { name, guardian, localGuardian, ...remainingStudentData } = payload;
   const modifiedUpdatedData: Record<string, unknown> = {
-    ...remainingStudentData
-  }
+    ...remainingStudentData,
+  };
   /*
   we send it-->
     guardian : {
@@ -135,51 +135,52 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   */
   if (name && Object.keys(name).length) {
     for (const [key, value] of Object.entries(name)) {
-      modifiedUpdatedData[`name.${key}`] = value
+      modifiedUpdatedData[`name.${key}`] = value;
     }
   }
   if (guardian && Object.keys(guardian).length) {
     for (const [key, value] of Object.entries(guardian)) {
-      modifiedUpdatedData[`guardian.${key}`] = value
+      modifiedUpdatedData[`guardian.${key}`] = value;
     }
   }
   if (localGuardian && Object.keys(localGuardian).length) {
     for (const [key, value] of Object.entries(localGuardian)) {
-      modifiedUpdatedData[`localGuardian.${key}`] = value
+      modifiedUpdatedData[`localGuardian.${key}`] = value;
     }
   }
   // console.log(modifiedUpdatedData);
-  const result = await Student.findByIdAndUpdate(
-    id,
-    modifiedUpdatedData,
-    { new: true, runValidators: true })
+  const result = await Student.findByIdAndUpdate(id, modifiedUpdatedData, {
+    new: true,
+    runValidators: true,
+  });
 
   return result; // result will go to controller
 };
-
 
 const deleteSingleStudentFromDB = async (id: string) => {
   const session = await mongoose.startSession();
 
   try {
-    session.startTransaction()
+    session.startTransaction();
     const deleteStudent = await Student.findByIdAndUpdate(
       id,
       { isDeleted: true },
-      { new: true, session });
+      { new: true, session },
+    );
 
     if (!deleteStudent) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to deleted Student')
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to deleted Student');
     }
     // get user _id from deletedFaculty
     const userId = deleteStudent.user;
     const deleteUser = await User.findByIdAndUpdate(
       userId,
       { isDeleted: true },
-      { new: true, session })
+      { new: true, session },
+    );
 
     if (!deleteUser) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to deleted User')
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to deleted User');
     }
     await session.commitTransaction();
     await session.endSession();
@@ -188,9 +189,8 @@ const deleteSingleStudentFromDB = async (id: string) => {
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(httpStatus.NOT_FOUND, 'Failed to delete student.')
+    throw new AppError(httpStatus.NOT_FOUND, 'Failed to delete student.');
   }
-
 };
 export const StudentServices = {
   //to send export func name
@@ -198,5 +198,5 @@ export const StudentServices = {
   getAllStudentFromDB,
   getSingleStudentFromDB,
   updateStudentIntoDB,
-  deleteSingleStudentFromDB
+  deleteSingleStudentFromDB,
 };

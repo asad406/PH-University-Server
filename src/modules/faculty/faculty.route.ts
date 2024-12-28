@@ -6,15 +6,14 @@ import auth from '../../middleware/auth';
 import { USER_ROLE } from '../user/user.constant';
 import { TUserRole } from '../user/user.interface';
 
-
 const router = express.Router();
 
 router.get('/:id', FacultyControllers.getSingleFaculty);
 
 router.patch(
-    '/:id',
-    validateRequest(updateFacultyValidationSchema),
-    FacultyControllers.updateFaculty,
+  '/:id',
+  validateRequest(updateFacultyValidationSchema),
+  FacultyControllers.updateFaculty,
 );
 
 router.delete('/:id', FacultyControllers.deleteFaculty);

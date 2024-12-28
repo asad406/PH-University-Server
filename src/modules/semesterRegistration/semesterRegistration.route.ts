@@ -4,12 +4,27 @@ import { SemesterRegistrationValidation } from './semesterRegistration.validatio
 import { SemesterRegistrationController } from './semesterRegistration.controller';
 const router = express.Router();
 
-router.post('/create-semester-registration', validateRequest(SemesterRegistrationValidation.createSemesterRegistrationValidationSchema), SemesterRegistrationController.createSemesterRegistration)
+router.post(
+  '/create-semester-registration',
+  validateRequest(
+    SemesterRegistrationValidation.createSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegistrationController.createSemesterRegistration,
+);
 
-router.get('/:id',SemesterRegistrationController.getSingleSemesterRegistration)
+router.get(
+  '/:id',
+  SemesterRegistrationController.getSingleSemesterRegistration,
+);
 
-router.get('/',SemesterRegistrationController.getAllSemesterRegistration)
+router.get('/', SemesterRegistrationController.getAllSemesterRegistration);
 
-router.patch('/:id', validateRequest(SemesterRegistrationValidation.updateSemesterRegistrationValidationSchema), SemesterRegistrationController.updateSemesterRegistration)
+router.patch(
+  '/:id',
+  validateRequest(
+    SemesterRegistrationValidation.updateSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegistrationController.updateSemesterRegistration,
+);
 
-export const SemesterRegistrationRoutes = router
+export const SemesterRegistrationRoutes = router;
