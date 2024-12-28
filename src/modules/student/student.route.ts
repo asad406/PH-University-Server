@@ -2,6 +2,8 @@ import express from 'express';
 import { StudentControllers } from './student.controller';
 import validateRequest from '../../middleware/validateRequest';
 import { studentValidations } from './student.zod.validation';
+import auth from '../../middleware/auth';
+import { USER_ROLE } from '../user/user.constant';
 const router = express.Router();
 //will call controller function
 // router.post('/create-student', StudentControllers.createStudent);
@@ -13,6 +15,6 @@ router.patch('/:id',
 
 router.delete('/:id', StudentControllers.deleteSingleStudent);
 
-router.get('/', StudentControllers.getAllStudent);
+router.get('/',auth(USER_ROLE.admin), StudentControllers.getAllStudent);
 
 export const StudentRoutes = router;

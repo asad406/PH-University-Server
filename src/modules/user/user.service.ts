@@ -12,6 +12,7 @@ import { AcademicDepartment } from "../academicDepartment/academicDepartment.mod
 import { generateAdminId, generateFacultyId, generateStudentId } from "./user.utils";
 import { Faculty } from "../faculty/faculty.model";
 import { Admin } from "../admin/admin.model";
+import { TAdmin } from "../admin/admin.interface";
 
 const createStudentToDB = async (password: string, payload: TStudent) => {
     //create a user object
@@ -138,14 +139,14 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 };
 
 
-const createAdminIntoDB = async (password: string, payload: TFaculty) => {
+const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     // create a user object
     const userData: Partial<TUser> = {};
 
     //if password is not given , use deafult password
     userData.password = password || (config.default_password as string);
 
-    //set student role
+    //set admin role
     userData.role = 'admin';
 
     const session = await mongoose.startSession();
