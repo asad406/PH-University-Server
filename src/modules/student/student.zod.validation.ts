@@ -164,9 +164,6 @@ const updateStudentValidationSchema = z.object({
           localGuardian: updateLocalGuardianValidationSchema.optional(),
           admissionSemester: z.string().optional(),
           academicDepartment: z.string().optional(),
-          profileImage: z.string().optional(),
-          // isActive: z.enum(['active', 'inactive']).default('active'),
-          // isDeleted: z.boolean().default(false)
         })
         .optional(),
     })

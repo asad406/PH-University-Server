@@ -8,7 +8,8 @@ import config from '../../config';
 
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
-  const result = await UserServices.createStudentToDB(password, studentData);
+
+  const result = await UserServices.createStudentToDB(req.file,password, studentData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -42,7 +43,7 @@ const createAdmin = catchAsync(async (req, res) => {
   });
 });
 const getMe = catchAsync(async (req, res) => {
-  const {userId, role} = req.user
+  const { userId, role } = req.user;
   const result = await UserServices.getMeFromDB(userId, role);
 
   sendResponse(res, {
@@ -52,12 +53,24 @@ const getMe = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const changeStatus = catchAsync(async (req, res) => {
+  const id = req.params?.id;
+  const result = await UserServices.changeStatusFromDB(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Status is changed successfully`,
+    data: result,
+  });
+});
 
 export const UserController = {
   createStudent,
   createFaculty,
   createAdmin,
-  getMe
+  getMe,
+  changeStatus,
 };
 
 /*

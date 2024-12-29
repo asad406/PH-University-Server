@@ -103,7 +103,7 @@ const changePassword = async (
 
 const refreshToken = async (token: string) => {
   //check if the token is valid
-  const decoded = verifyToken(token,config.jwt_access_secret as string)
+  const decoded = verifyToken(token, config.jwt_access_secret as string);
   const { userId, iat } = decoded;
   //check if the user is exist by static method
   const user = await User.isUserExistsByCustomId(userId);
@@ -167,16 +167,19 @@ const forgetPassword = async (userId: string) => {
   const resetToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
-    '10m'
+    '10m',
   );
-  const resetUILink = `${config.reset_password_ui_link}?id=${user?.id}&token=${resetToken}`
+  const resetUILink = `${config.reset_password_ui_link}?id=${user?.id}&token=${resetToken}`;
 
-  sendEmail(user?.email, resetUILink)
+  sendEmail(user?.email, resetUILink);
   console.log(resetUILink);
-  return {}
+  return {};
 };
 //Reset Password
-const resetPassword = async (payload: { id: string, newPassword: string }, token: string) => {
+const resetPassword = async (
+  payload: { id: string; newPassword: string },
+  token: string,
+) => {
   //check if the user is exist by static method
   const user = await User.isUserExistsByCustomId(payload?.id);
   if (!user) {
@@ -196,11 +199,11 @@ const resetPassword = async (payload: { id: string, newPassword: string }, token
     token,
     config.jwt_access_secret as string,
   ) as JwtPayload;
-  //Check ID 
-  if (payload?.id !== decoded?.userId){
+  //Check ID
+  if (payload?.id !== decoded?.userId) {
     throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden');
   }
-  
+
   //hash new password
   const newHashPassword = await bcrypt.hash(
     payload?.newPassword,
@@ -223,5 +226,5 @@ export const AuthService = {
   changePassword,
   refreshToken,
   forgetPassword,
-  resetPassword
+  resetPassword,
 };

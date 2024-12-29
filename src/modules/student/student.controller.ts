@@ -33,7 +33,6 @@ import catchAsync from '../../utils/catchAsync';
 
 // Data receive from student.service
 const getAllStudent: RequestHandler = catchAsync(async (req, res) => {
-  console.log('from student controller', req.cookies);
   const result = await StudentServices.getAllStudentFromDB(req.query);
   // res.status(200).json({
   //   success: true,

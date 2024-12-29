@@ -50,7 +50,7 @@ export const AuthValidation = {
   changePasswordValidationSchema,
   refreshTokenValidationSchema,
   forgetPasswordTokenValidationSchema,
-  resetPasswordTokenValidationSchema
+  resetPasswordTokenValidationSchema,
 };
 
 // http://localhost:3000/?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzU0MzcxMjksImV4cCI6MTczNTQzNzcyOX0.RJJdUHaMM-NZSAcxHRJNtbwURgayjO_MGRJDNxST-u4

@@ -17,9 +17,9 @@ import {
 import { Faculty } from '../faculty/faculty.model';
 import { Admin } from '../admin/admin.model';
 import { TAdmin } from '../admin/admin.interface';
-import { verifyToken } from '../Auth/auth.utils';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentToDB = async (password: string, payload: TStudent) => {
+const createStudentToDB = async (file: any, password: string, payload: TStudent) => {
   //create a user object
   const userData: Partial<TUser> = {};
   //if password is not given, use default password
@@ -60,8 +60,11 @@ const createStudentToDB = async (password: string, payload: TStudent) => {
 
     //     const newStudent = await StudentModel.create(payload)
     //     return newStudent
-    // }
-
+    // } 
+    const imageName = `${payload?.name?.firstName}${userData?.id}`
+    const path = file?.path
+    //send image to cloudinary
+    const profilePicture = await sendImageToCloudinary(imageName, path)
     //step - 3 (transaction-1)
     const newUser = await User.create([userData], { session }); // it's return an array
     //create a student
@@ -70,6 +73,7 @@ const createStudentToDB = async (password: string, payload: TStudent) => {
     }
     payload.id = newUser[0].id; //Embedded id
     payload.user = newUser[0]._id; //reference _id
+    payload.profileImage= profilePicture?.secure_url
 
     //step - 4 (transaction-2)
     const newStudent = await Student.create([payload], { session });
@@ -196,23 +200,29 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     throw new Error(err);
   }
 };
-const getMeFromDB = async (userId: string,role: string) => {  
-  let result = null
-  if(role === 'student'){
-    result = await Student.findOne({id:userId}).populate('user')
+const getMeFromDB = async (userId: string, role: string) => {
+  let result = null;
+  if (role === 'student') {
+    result = await Student.findOne({ id: userId }).populate('user');
   }
-  if(role === 'faculty'){
-    result = await Faculty.findOne({id:userId}).populate('user')
+  if (role === 'faculty') {
+    result = await Faculty.findOne({ id: userId }).populate('user');
   }
-  if(role === 'admin'){
-    result = await Admin.findOne({id:userId}).populate('user')
+  if (role === 'admin') {
+    result = await Admin.findOne({ id: userId }).populate('user');
   }
-  return result
+  return result;
+};
+//change user status
+const changeStatusFromDB = async (id: string, payload: Partial<TUser>) => {
+  const result = await User.findByIdAndUpdate(id, payload, { new: true });
+  return result;
 };
 
 export const UserServices = {
   createStudentToDB,
   createFacultyIntoDB,
   createAdminIntoDB,
-  getMeFromDB
+  getMeFromDB,
+  changeStatusFromDB,
 };
