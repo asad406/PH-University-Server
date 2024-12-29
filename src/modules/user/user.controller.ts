@@ -2,6 +2,9 @@ import { UserServices } from './user.service';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
+import AppError from '../../errors/AppError';
+import { verifyToken } from '../Auth/auth.utils';
+import config from '../../config';
 
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
@@ -38,11 +41,23 @@ const createAdmin = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getMe = catchAsync(async (req, res) => {
+  const {userId, role} = req.user
+  const result = await UserServices.getMeFromDB(userId, role);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `${role} is retrieved successfully`,
+    data: result,
+  });
+});
 
 export const UserController = {
   createStudent,
   createFaculty,
   createAdmin,
+  getMe
 };
 
 /*

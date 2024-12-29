@@ -5,7 +5,7 @@ import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
-import { createToken } from './auth.utils';
+import { createToken, verifyToken } from './auth.utils';
 import { sendEmail } from '../../utils/sendEmail';
 
 const loginUser = async (payload: TLoginUser) => {
@@ -103,11 +103,7 @@ const changePassword = async (
 
 const refreshToken = async (token: string) => {
   //check if the token is valid
-  const decoded = jwt.verify(
-    token,
-    config.jwt_refresh_secret as string,
-  ) as JwtPayload;
-  console.log('from auth service', decoded);
+  const decoded = verifyToken(token,config.jwt_access_secret as string)
   const { userId, iat } = decoded;
   //check if the user is exist by static method
   const user = await User.isUserExistsByCustomId(userId);
