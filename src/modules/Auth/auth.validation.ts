@@ -27,9 +27,30 @@ const refreshTokenValidationSchema = z.object({
     }),
   }),
 });
+const forgetPasswordTokenValidationSchema = z.object({
+  body: z.object({
+    id: z.string({
+      required_error: 'User id is required',
+    }),
+  }),
+});
+const resetPasswordTokenValidationSchema = z.object({
+  body: z.object({
+    id: z.string({
+      required_error: 'User id is required',
+    }),
+    newPassword: z.string({
+      required_error: 'User password is required',
+    }),
+  }),
+});
 
 export const AuthValidation = {
   loginValidationSchema,
   changePasswordValidationSchema,
   refreshTokenValidationSchema,
+  forgetPasswordTokenValidationSchema,
+  resetPasswordTokenValidationSchema
 };
+
+// http://localhost:3000/?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzU0MzcxMjksImV4cCI6MTczNTQzNzcyOX0.RJJdUHaMM-NZSAcxHRJNtbwURgayjO_MGRJDNxST-u4
