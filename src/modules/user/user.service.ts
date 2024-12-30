@@ -19,7 +19,11 @@ import { Admin } from '../admin/admin.model';
 import { TAdmin } from '../admin/admin.interface';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentToDB = async (file: any, password: string, payload: TStudent) => {
+const createStudentToDB = async (
+  file: any,
+  password: string,
+  payload: TStudent,
+) => {
   //create a user object
   const userData: Partial<TUser> = {};
   //if password is not given, use default password
@@ -60,11 +64,11 @@ const createStudentToDB = async (file: any, password: string, payload: TStudent)
 
     //     const newStudent = await StudentModel.create(payload)
     //     return newStudent
-    // } 
-    const imageName = `${payload?.name?.firstName}${userData?.id}`
-    const path = file?.path
+    // }
+    const imageName = `${payload?.name?.firstName}${userData?.id}`;
+    const path = file?.path;
     //send image to cloudinary
-    const profilePicture = await sendImageToCloudinary(imageName, path)
+    const profilePicture = await sendImageToCloudinary(imageName, path);
     //step - 3 (transaction-1)
     const newUser = await User.create([userData], { session }); // it's return an array
     //create a student
@@ -73,7 +77,7 @@ const createStudentToDB = async (file: any, password: string, payload: TStudent)
     }
     payload.id = newUser[0].id; //Embedded id
     payload.user = newUser[0]._id; //reference _id
-    payload.profileImage= profilePicture?.secure_url
+    payload.profileImage = profilePicture?.secure_url;
 
     //step - 4 (transaction-2)
     const newStudent = await Student.create([payload], { session });

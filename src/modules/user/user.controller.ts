@@ -9,7 +9,11 @@ import config from '../../config';
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
 
-  const result = await UserServices.createStudentToDB(req.file,password, studentData);
+  const result = await UserServices.createStudentToDB(
+    req.file,
+    password,
+    studentData,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
