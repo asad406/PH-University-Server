@@ -16,7 +16,12 @@ router.post(
 
 router.get(
   '/:id',
-  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+  ),
   courseController.getSingleCourse,
 );
 
@@ -42,7 +47,12 @@ router.delete(
 
 router.get(
   '/',
-  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+  ),
   courseController.getAllCourse,
 );
 

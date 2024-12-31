@@ -3,12 +3,13 @@ import { AcademicSemesterController } from './academicSemester.controller';
 import validateRequest from '../../middleware/validateRequest';
 import { AcademicSemesterValidations } from './academicSemester.validation';
 import auth from '../../middleware/auth';
+import { USER_ROLE } from '../user/user.constant';
 
 const router = express.Router();
 
 router.post(
   '/create-academic-semester',
-  auth('admin', 'superAdmin'),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(
     AcademicSemesterValidations.createAcademicSemesterValidationSchema,
   ),
@@ -17,6 +18,7 @@ router.post(
 
 router.get(
   '/:semesterId',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   AcademicSemesterController.getSingleAcademicSemester,
 );
 
