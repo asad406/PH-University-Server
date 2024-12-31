@@ -2,35 +2,53 @@ import express from 'express';
 import validateRequest from '../../middleware/validateRequest';
 import { CourseValidation } from './course.validation';
 import { courseController } from './course.controller';
+import { USER_ROLE } from '../user/user.constant';
+import auth from '../../middleware/auth';
 
 const router = express.Router();
 
 router.post(
   '/create-course',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(CourseValidation.createCourseValidationSchema),
   courseController.createCourse,
 );
 
-router.get('/:id', courseController.getSingleCourse);
+router.get(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  courseController.getSingleCourse,
+);
 
-router.delete('/:id', courseController.deleteCourse);
+router.delete(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  courseController.deleteCourse,
+);
 
 router.put(
   '/:courseId/assign-faculties',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(CourseValidation.CourseFacultyValidationSchema),
   courseController.assignFacultiesWithCourse,
 );
 
 router.delete(
   '/:courseId/remove-faculties',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(CourseValidation.CourseFacultyValidationSchema),
   courseController.removeFacultiesFromCourse,
 );
 
-router.get('/', courseController.getAllCourse);
+router.get(
+  '/',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  courseController.getAllCourse,
+);
 
 router.patch(
   '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(CourseValidation.updateCourseValidationSchema),
   courseController.updateCourse,
 );
