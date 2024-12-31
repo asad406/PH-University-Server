@@ -7,9 +7,17 @@ import { USER_ROLE } from '../user/user.constant';
 
 const router = express.Router();
 
-router.get('/',auth(USER_ROLE.admin, USER_ROLE.superAdmin), AdminControllers.getAllAdmins);
+router.get(
+  '/',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  AdminControllers.getAllAdmins,
+);
 
-router.get('/:id',auth(USER_ROLE.admin, USER_ROLE.superAdmin), AdminControllers.getSingleAdmin);
+router.get(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  AdminControllers.getSingleAdmin,
+);
 
 router.patch(
   '/:id',
@@ -18,6 +26,10 @@ router.patch(
   AdminControllers.updateAdmin,
 );
 
-router.delete('/:adminId',auth(USER_ROLE.admin, USER_ROLE.superAdmin), AdminControllers.deleteAdmin);
+router.delete(
+  '/:adminId',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  AdminControllers.deleteAdmin,
+);
 
 export const AdminRoutes = router;
